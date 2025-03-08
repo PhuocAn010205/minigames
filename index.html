@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Quiz App Fake</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('./asset/img/depnha.jpg');
+            background-size: cover; /* Đảm bảo hình nền bao phủ toàn bộ khu vực */
+            background-position: center;
+            object-fit: cover;
+        }
+        .quiz-container {
+            padding: 20px;
+            border-radius: 10px;
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+            text-align: center;
+            width: 400px;
+            background: transparent;
+            border: transparent;
+            display: none; /* Ẩn container câu đố ban đầu */
+        }
+        .play-button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background: transparent;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.25s;
+        }
+        .play-button:hover {
+            background: #218838;
+        }
+        .answer {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #ddd;
+            transition: background 0.25s;
+            margin-bottom: 16px;
+        }
+        .answer:hover {
+            background: #ccc;
+        }
+        .correct {
+            background: green !important;
+            color: white;
+        }
+        .wrong {
+            background: red !important;
+            color: white;
+        }
+        .penalty {
+            display: none;
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .bxs-star {
+          color: gold;
+        }
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .navigation-button {
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+            background: transparent;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="welcomeMessage">Chào mừng các bạn đến mini games vui vẻ</h1>
+    <button class="play-button" id="playButton">Chơi Ngay</button>
+    <div class="quiz-container" id="quizContainer">
+        <h2 id="question"></h2>
+        <div id="answers"></div>
+        <p id="result"></p>
+        <p id="penalty" class="penalty"></p>
+        <div class="navigation-buttons">
+            <button class="navigation-button" id="prevButton"><i class='bx bx-chevron-left'></i></button>
+            <button class="navigation-button" id="nextButton"><i class='bx bx-chevron-right'></i></button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                text: "Nhà nước ra đời khi nào?",
+                answers: ["Khi con người biết trồng trọt, chăn nuôi", "Khi xã hội xuất hiện giai cấp", "Khi con người sống thành bộ lạc", "Khi con người phát minh ra chữ viết"],
+                correct: 1
+            },
+            {
+                text: "Nhà nước XHCN ra đời khi nào?",
+                answers: ["Khi cách mạng tư sản thành công", "Khi chế độ phong kiến bị lật đổ", "Khi giai cấp vô sản lật đổ chế độ tư bản", "Khi nền kinh tế phát triển"],
+                correct: 2
+            },
+            {
+                text: "Mục tiêu của nhà nước XHCN là gì?",
+                answers: ["Quản lý xã hội", "Xây dựng chủ nghĩa xã hội", "Đưa nhân dân lao động lên làm chủ", "Cả 3 đáp án trên"],
+                correct: 3
+            },
+            {
+                text: "Nhà nước XHCN mang bản chất của giai cấp nào?",
+                answers: ["Giai cấp tư sản", "Giai cấp công nhân", "Giai cấp địa chủ", "Tầng lớp trí thức"],
+                correct: 1
+            },
+            {
+                text: "Nhà nước XHCN có đặc điểm gì về chính trị?",
+                answers: ["Quản lý xã hội bằng hệ thống pháp luật", "Chịu sự lãnh đạo của Đảng Cộng sản", "Giám sát bởi nhân dân", "Cả 3 đáp án trên"],
+                correct: 3
+            },
+            {
+                text: "Nhà nước XHCN được xây dựng trên chế độ sở hữu nào về tư liệu sản xuất?",
+                answers: ["Sở hữu tư nhân", "Sở hữu xã hội", "Sở hữu tập thể", "Sở hữu cá nhân"],
+                correct: 1
+            },
+            {
+                text: "Nền tảng tư tưởng của nhà nước XHCN là gì?",
+                answers: ["Chủ nghĩa duy vật biện chứng", "Chủ nghĩa tư bản", "Chủ nghĩa Mác - Lênin", "Học thuyết Khổng Tử"],
+                correct: 2
+            },
+            {
+                text: "Chức năng của nhà nước XHCN được chia dựa trên những yếu tố nào?",
+                answers: ["Phạm vi tác động của quyền lực nhà nước", "Phạm vi lĩnh vực tác động", "Phạm vi tính chất quyền lực", "Cả 3 đáp án trên"],
+                correct: 3
+            },
+            {
+                text: "Chức năng đối nội của nhà nước XHCN là gì?",
+                answers: ["Bảo vệ chế độ XHCN", "Duy trì trật tự xã hội", "Tổ chức và xây dựng kinh tế", "Cả 3 đáp án trên"],
+                correct: 3
+            },
+            {
+                text: "Chức năng giai cấp của nhà nước XHCN là gì?",
+                answers: ["Bảo vệ lợi ích của tư sản", "Duy trì giai cấp vô sản", "Trấn áp giai cấp đối lập", "Phát triển kinh tế tư nhân"],
+                correct: 2
+            },
+        ];
+
+        const penalties = [
+            "Hít đất 10 cái! 💪",
+            "Nhảy tại chỗ 15 cái! 🏃‍♀️",
+            "Squat 20 cái! 🏋️‍♀️",
+            "Nhảy cóc 10 cái! 🐸",
+            "Hát bài hát được cả lớp yêu cầu! 🎤"
+        ];
+
+        // Gán ngẫu nhiên hình phạt cho mỗi câu hỏi
+        questions.forEach(question => {
+            question.penalty = penalties[Math.floor(Math.random() * penalties.length)];
+        });
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+
+        document.getElementById("playButton").addEventListener("click", startQuiz);
+        document.getElementById("prevButton").addEventListener("click", prevQuestion);
+        document.getElementById("nextButton").addEventListener("click", nextQuestion);
+
+        function startQuiz() {
+            // Đặt lại các biến khi bắt đầu lại quiz
+            currentQuestion = 0;
+            correctAnswers = 0;
+            document.getElementById("result").innerHTML = ""; // Xóa kết quả trước đó
+            document.getElementById("penalty").style.display = "none"; // Ẩn hình phạt
+
+            document.getElementById("playButton").style.display = "none";
+            document.getElementById("quizContainer").style.display = "block";
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            document.getElementById("question").innerText = questions[currentQuestion].text;
+            const answersDiv = document.getElementById("answers");
+            answersDiv.innerHTML = "";
+            document.getElementById("penalty").style.display = "none"; // Ẩn hình phạt khi load câu mới
+
+            questions[currentQuestion].answers.forEach((answer, index) => {
+                const button = document.createElement("button");
+                button.innerText = answer;
+                button.classList.add("answer");
+                button.onclick = () => checkAnswer(index, button);
+                answersDiv.appendChild(button);
+            });
+
+            // Vô hiệu hóa nút prev nếu đang ở câu hỏi đầu tiên
+            document.getElementById("prevButton").disabled = currentQuestion === 0;
+            // Vô hiệu hóa nút next nếu đang ở câu hỏi cuối cùng
+            document.getElementById("nextButton").disabled = currentQuestion === questions.length - 1;
+        }
+
+        function checkAnswer(index, button) {
+            const correctIndex = questions[currentQuestion].correct;
+            const answerButtons = document.querySelectorAll(".answer");
+            answerButtons.forEach(btn => btn.disabled = true); // Vô hiệu hóa tất cả các nút trả lời
+
+            if (index === correctIndex) {
+                button.classList.add("correct");
+                correctAnswers++;
+            } else {
+                button.classList.add("wrong");
+                document.getElementById("penalty").innerText = questions[currentQuestion].penalty; // Hiển thị hình phạt
+                document.getElementById("penalty").style.display = "block";
+            }
+
+            // Kiểm tra nếu đây là câu hỏi cuối cùng
+            if (currentQuestion === questions.length - 1) {
+                showResult();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function showResult() {
+            document.getElementById("penalty").style.display = "none"; // Ẩn hình phạt khi hiển thị kết quả
+            document.getElementById("question").innerText = "Bạn đã hoàn thành bài kiểm tra!";
+            document.getElementById("answers").innerHTML = "";
+            let resultText = "";
+            let stars = "";
+
+            // Đánh giá kết quả dựa trên số câu trả lời đúng
+            if (correctAnswers <= 3) {
+                stars = "<i class='bx bxs-star'></i>";
+                resultText = "Hơi non nha babe";
+            } else if (correctAnswers <= 7) {
+                stars = "<i class='bx bxs-star'></i><i class='bx bxs-star'></i>";
+                resultText = "Tạm tạm";
+            } else {
+                stars = "<i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i>";
+                resultText = "Ghê đấy các babe";
+            }
+
+            document.getElementById("welcomeMessage").innerHTML = `${stars} ${resultText}`; // Thay đổi nội dung của h1
+        }
+    </script>
+</body>
+</html>
