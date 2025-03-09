@@ -13,7 +13,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-image: url('./asset/img/depnha.jpg');
+            background-image: url('./asset/img/dep1.jpg');
             background-size: cover; /* Đảm bảo hình nền bao phủ toàn bộ khu vực */
             background-position: center;
             object-fit: cover;
@@ -42,6 +42,7 @@
             background: #218838;
         }
         .answer {
+            font-size:20px;
             display: block;
             width: 100%;
             padding: 10px;
@@ -79,13 +80,28 @@
             width: 100%;
             margin-top: 20px;
         }
-        .navigation-button {
-            cursor: pointer;
-            font-size: 24px;
-            color: white;
-            background: transparent;
-            border: none;
+ .navigation-button {
+   cursor: pointer;
+   font-size: 24px;
+   color: #000;
+    display: flex;
+    justify-content: center;
+  align-items: center;
+     width: 36px;
+   height: 36px;
+border-radius: 50%;
+    border: 1px solid #575F66;
+    outline: none;
+    color: #575F66;
+    background: #fff;
+    transition: 0.25s;
         }
+  .navigation-button:hover {
+        color: #fff;
+    border-color: #2E80CE;
+    background: #2E80CE;
+    cursor: pointer;
+        } 
     </style>
 </head>
 <body>
@@ -204,8 +220,8 @@
 
             // Vô hiệu hóa nút prev nếu đang ở câu hỏi đầu tiên
             document.getElementById("prevButton").disabled = currentQuestion === 0;
-            // Vô hiệu hóa nút next nếu đang ở câu hỏi cuối cùng
-            document.getElementById("nextButton").disabled = currentQuestion === questions.length - 1;
+            // Luôn bật nút next để có thể hiển thị kết quả sau câu hỏi cuối cùng
+            document.getElementById("nextButton").disabled = false;
         }
 
         function checkAnswer(index, button) {
@@ -220,11 +236,6 @@
                 button.classList.add("wrong");
                 document.getElementById("penalty").innerText = questions[currentQuestion].penalty; // Hiển thị hình phạt
                 document.getElementById("penalty").style.display = "block";
-            }
-
-            // Kiểm tra nếu đây là câu hỏi cuối cùng
-            if (currentQuestion === questions.length - 1) {
-                showResult();
             }
         }
 
