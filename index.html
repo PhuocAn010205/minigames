@@ -80,28 +80,28 @@
             width: 100%;
             margin-top: 20px;
         }
- .navigation-button {
-   cursor: pointer;
-   font-size: 24px;
-   color: #000;
-    display: flex;
-    justify-content: center;
-  align-items: center;
-     width: 36px;
-   height: 36px;
-border-radius: 50%;
-    border: 1px solid #575F66;
-    outline: none;
-    color: #575F66;
-    background: #fff;
-    transition: 0.25s;
+        .navigation-button {
+            cursor: pointer;
+            font-size: 24px;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #575F66;
+            outline: none;
+            color: #575F66;
+            background: #fff;
+            transition: 0.25s;
         }
-  .navigation-button:hover {
-        color: #fff;
-    border-color: #2E80CE;
-    background: #2E80CE;
-    cursor: pointer;
-        } 
+        .navigation-button:hover {
+            color: #fff;
+            border-color: #2E80CE;
+            background: #2E80CE;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -114,6 +114,7 @@ border-radius: 50%;
         <p id="penalty" class="penalty"></p>
         <div class="navigation-buttons">
             <button class="navigation-button" id="prevButton"><i class='bx bx-chevron-left'></i></button>
+            <button class="navigation-button" id="resetButton"><i class='bx bx-refresh'></i></button>
             <button class="navigation-button" id="nextButton"><i class='bx bx-chevron-right'></i></button>
         </div>
     </div>
@@ -132,7 +133,7 @@ border-radius: 50%;
             },
             {
                 text: "Mục tiêu của nhà nước XHCN là gì?",
-                answers: ["Quản lý xã hội", "Xây dựng chủ nghĩa xã hội", "Đưa nhân dân lao động lên làm chủ", "Cả 3 đáp án trên"],
+                answers: ["Duy trì chế độ tư hữu và phân hóa giai cấp", "Đặt lợi ích cá nhân lên trên lợi ích tập thể", "Hạn chế vai trò của nhân dân trong quản lý xã hội ", "Xây dựng chủ nghĩa xã hội, đưa nhân dân lao động lên làm chủ"],
                 correct: 3
             },
             {
@@ -174,10 +175,12 @@ border-radius: 50%;
 
         const penalties = [
             "Hít đất 10 cái! 💪",
-            "Nhảy tại chỗ 15 cái! 🏃‍♀️",
+            "Nhảy tại chỗ 15s cái! 🏃‍♀️",
             "Squat 20 cái! 🏋️‍♀️",
             "Nhảy cóc 10 cái! 🐸",
-            "Hát bài hát được cả lớp yêu cầu! 🎤"
+            "Hát bài hát được cả lớp yêu cầu! 🎤",
+            "Nhảy điệu kỳ lạ trong 30 giây! 💃",
+            "Quay vòng 5 lần rồi đi thẳng! 🔄",
         ];
 
         // Gán ngẫu nhiên hình phạt cho mỗi câu hỏi
@@ -190,6 +193,7 @@ border-radius: 50%;
 
         document.getElementById("playButton").addEventListener("click", startQuiz);
         document.getElementById("prevButton").addEventListener("click", prevQuestion);
+        document.getElementById("resetButton").addEventListener("click", resetQuestion);
         document.getElementById("nextButton").addEventListener("click", nextQuestion);
 
         function startQuiz() {
@@ -253,6 +257,12 @@ border-radius: 50%;
                 currentQuestion--;
                 loadQuestion();
             }
+        }
+
+        function resetQuestion() {
+            // Gán lại hình phạt ngẫu nhiên khi reset câu hỏi
+            questions[currentQuestion].penalty = penalties[Math.floor(Math.random() * penalties.length)];
+            loadQuestion();
         }
 
         function showResult() {
